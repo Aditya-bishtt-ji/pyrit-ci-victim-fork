@@ -1,0 +1,21 @@
+name: PyRIT Security Scan
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install pyrit
+      - run: pyrit_scan --config configs/pyrit.conf
+    env:
+      OPENAI_CHAT_KEY: ${{ secrets.OPENAI_CHAT_KEY }}
+      OPENAI_CHAT_MODEL: gpt-4o
+      OPENAI_CHAT_ENDPOINT: https://api.openai.com/v1
